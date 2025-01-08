@@ -35,7 +35,7 @@ defmodule Multipart.Part do
   @spec file_body(String.t(), headers()) :: t()
   def file_body(path, headers \\ []) do
     %File.Stat{size: size} = File.stat!(path)
-    file_stream = File.stream!(path, [{:read_ahead, 4096}], 1024)
+    file_stream = File.stream!(path, 1024, [{:read_ahead, 4096}])
 
     %__MODULE__{body: file_stream, content_length: size, headers: headers}
   end
@@ -135,9 +135,9 @@ defmodule Multipart.Part do
   end
 
   defp maybe_add_content_disposition_header(headers, name) do
-    unless headers
-           |> Enum.map(fn {k, _} -> String.downcase(k) end)
-           |> Enum.member?("content-disposition") do
+    if !(headers
+         |> Enum.map(fn {k, _} -> String.downcase(k) end)
+         |> Enum.member?("content-disposition")) do
       [{"content-disposition", content_disposition("form-data", name: name)} | headers]
     else
       headers

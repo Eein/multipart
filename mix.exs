@@ -40,7 +40,8 @@ defmodule Multipart.MixProject do
   defp deps do
     [
       {:mime, "~> 1.2 or ~> 2.0"},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 end
